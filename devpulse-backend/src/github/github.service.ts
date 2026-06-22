@@ -80,7 +80,9 @@ export type GitHubSummary = {
   // longestStreak    → consecutive active days within the events window
   // mostActiveRepo   → repo with most events in the window
   // commitsByDayOfWeek → PushEvent commits grouped by UTC day in the window
+  // last7Days        → PushEvent counts for each of the 7 calendar days ending today
   // topRepos         → repos with most commits in the window
+  // recentRepoActivity → repos sorted by most recent push, with last-active timestamp
   // period           → date range of the fetched events
 
   period: string;
@@ -92,7 +94,9 @@ export type GitHubSummary = {
   longestStreak: number;
   languageBreakdown: Record<string, number>;
   commitsByDayOfWeek: Record<string, number>;
+  last7Days?: Array<{ date: string; day: string; commits: number }>;
   topRepos: Array<{ name: string; commits: number }>;
+  recentRepoActivity?: Array<{ repo: string; commits: number; lastActive: string }>;
 };
 
 // ─── Pure helper functions ───────────────────────────────────────────────────
@@ -263,6 +267,7 @@ export class GithubService {
     repos: GitHubRawRepo[],
     totalPRs: number,
     totalIssuesClosed: number,
+    today: Date = new Date(),
   ): GitHubSummary {
     const activeDateSet = new Set<string>();
     // PushEvent count per repo — used for both topRepos and mostActiveRepo.
@@ -278,6 +283,8 @@ export class GithubService {
       Friday: 0,
       Saturday: 0,
     };
+    const commitsByDate: Record<string, number> = {};
+    const repoLastActive: Record<string, string> = {};
 
     let totalCommits = 0;
 
@@ -297,6 +304,13 @@ export class GithubService {
         // Use UTC day to stay consistent with toUtcDateStr()
         const day = DAY_NAMES[new Date(event.created_at).getUTCDay()];
         commitsByDayOfWeek[day] = (commitsByDayOfWeek[day] ?? 0) + 1;
+
+        const dateStr = toUtcDateStr(event.created_at);
+        commitsByDate[dateStr] = (commitsByDate[dateStr] ?? 0) + 1;
+
+        if (!repoLastActive[repo] || event.created_at > repoLastActive[repo]) {
+          repoLastActive[repo] = event.created_at;
+        }
       }
     }
 
@@ -326,6 +340,23 @@ export class GithubService {
         ? `${activeDates[0]} to ${activeDates[activeDates.length - 1]}`
         : 'no recent activity';
 
+    const last7Days = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(today);
+      d.setUTCDate(d.getUTCDate() - (6 - i));
+      const date = d.toISOString().slice(0, 10);
+      const day = DAY_NAMES[d.getUTCDay()];
+      return { date, day, commits: commitsByDate[date] ?? 0 };
+    });
+
+    const recentRepoActivity = Object.entries(pushEventsByRepo)
+      .map(([repo, commits]) => ({
+        repo,
+        commits,
+        lastActive: repoLastActive[repo] ?? '',
+      }))
+      .sort((a, b) => b.lastActive.localeCompare(a.lastActive))
+      .slice(0, 8);
+
     return {
       username,
       period,
@@ -337,7 +368,9 @@ export class GithubService {
       longestStreak,
       languageBreakdown,
       commitsByDayOfWeek,
+      last7Days,
       topRepos,
+      recentRepoActivity,
     };
   }
 
@@ -350,12 +383,15 @@ export class GithubService {
     ]);
     console.log('EVENTS COUNT:', events.length);
     console.log('FIRST EVENT:', events[0]);
-    return this.buildSummary(
+    const summary = this.buildSummary(
       username,
       events,
       repos,
       totalPRs,
       totalIssuesClosed,
     );
+    console.log('RECENT REPO ACTIVITY:', JSON.stringify(summary.recentRepoActivity, null, 2));
+    console.log('LAST 7 DAYS:', JSON.stringify(summary.last7Days, null, 2));
+    return summary;
   }
 }

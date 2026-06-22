@@ -15,7 +15,9 @@ export type GitHubSummary = {
   longestStreak: number;
   languageBreakdown: Record<string, number>;
   commitsByDayOfWeek: Record<string, number>;
+  last7Days?: Array<{ date: string; day: string; commits: number }>;
   topRepos: Array<{ name: string; commits: number }>;
+  recentRepoActivity?: Array<{ repo: string; commits: number; lastActive: string }>;
 };
 
 export type ChatMessage = {

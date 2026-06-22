@@ -4,6 +4,7 @@ import {
   IsDefined,
   IsNumber,
   IsObject,
+  IsOptional,
   IsString,
   Min,
   ValidateNested,
@@ -16,6 +17,30 @@ class TopRepoDto {
   @IsNumber()
   @Min(0)
   commits!: number;
+}
+
+class Last7DayDto {
+  @IsString()
+  date!: string;
+
+  @IsString()
+  day!: string;
+
+  @IsNumber()
+  @Min(0)
+  commits!: number;
+}
+
+class RecentRepoActivityDto {
+  @IsString()
+  repo!: string;
+
+  @IsNumber()
+  @Min(0)
+  commits!: number;
+
+  @IsString()
+  lastActive!: string;
 }
 
 export class GitHubSummaryDto {
@@ -58,6 +83,18 @@ export class GitHubSummaryDto {
   @ValidateNested({ each: true })
   @Type(() => TopRepoDto)
   topRepos!: Array<{ name: string; commits: number }>;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => Last7DayDto)
+  last7Days?: Array<{ date: string; day: string; commits: number }>;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => RecentRepoActivityDto)
+  recentRepoActivity?: Array<{ repo: string; commits: number; lastActive: string }>;
 }
 
 export class GenerateReportDto {

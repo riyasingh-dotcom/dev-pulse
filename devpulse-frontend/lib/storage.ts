@@ -1,6 +1,8 @@
 import type { GitHubSummary, ChatMessage } from "./types";
 
-const SESSION_KEY = "devpulse_session";
+// Bump this version whenever GitHubSummary gains required fields — forces a
+// fresh API call instead of silently restoring an incomplete cached summary.
+const SESSION_KEY = "devpulse_session_v2";
 
 type PersistedSession = {
   summary: GitHubSummary;

@@ -13,6 +13,7 @@ import { ChallengesCard } from "@/components/dashboard/ChallengesCard";
 import { ActivityTrendChart } from "@/components/dashboard/ActivityTrendChart";
 import { LanguageBreakdown } from "@/components/dashboard/LanguageBreakdown";
 import { TopRepositories } from "@/components/dashboard/TopRepositories";
+import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { ChatPanel } from "@/components/dashboard/ChatPanel";
 import { PinAuth } from "@/components/auth/PinAuth";
 import type { GitHubSummary, ChatMessage, ProductivityScores } from "@/lib/types";
@@ -210,7 +211,10 @@ export default function Home() {
               </div>
             </div>
 
-            <TopRepositories summary={summary} />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+              <TopRepositories summary={summary} />
+              <RecentActivity summary={summary} />
+            </div>
           </>
         )}
 
