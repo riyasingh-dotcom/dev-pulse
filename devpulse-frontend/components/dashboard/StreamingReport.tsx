@@ -26,17 +26,17 @@ function RenderedReport({ report }: { report: string }) {
 
   if (!hasStructured) {
     return (
-      <div className="text-[15px] text-foreground/80 leading-relaxed whitespace-pre-wrap">
+      <div className="text-[12px] text-foreground/80 leading-relaxed whitespace-pre-wrap">
         {report}
       </div>
     );
   }
 
   return (
-    <div className="space-y-5 text-[15px]">
+    <div className="space-y-5 text-[12px]">
       {overview && (
         <section>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">
+          <p className="text-[12px] font-bold uppercase tracking-widest text-muted-foreground mb-2">
             Overview
           </p>
           <p className="text-foreground/85 leading-relaxed">{overview}</p>
@@ -45,7 +45,7 @@ function RenderedReport({ report }: { report: string }) {
 
       {strengths.length > 0 && (
         <section>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-green-600 dark:text-green-400 mb-2">
+          <p className="text-[12px] font-bold uppercase tracking-widest text-green-600 dark:text-green-400 mb-2">
             Strengths
           </p>
           <div className="space-y-1.5">
@@ -61,7 +61,7 @@ function RenderedReport({ report }: { report: string }) {
 
       {improvements.length > 0 && (
         <section>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-2">
+          <p className="text-[12px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-2">
             Improvements
           </p>
           <div className="space-y-1.5">
@@ -77,7 +77,7 @@ function RenderedReport({ report }: { report: string }) {
 
       {weeklyChallenge.length > 0 && (
         <section>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-primary mb-2">
+          <p className="text-[12px] font-bold uppercase tracking-widest text-primary mb-2">
             Weekly Challenge
           </p>
           <div className="space-y-1.5">
