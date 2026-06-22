@@ -12,7 +12,7 @@ CRITICAL RULES:
 OUTPUT FORMAT:
 
 OVERVIEW:
-<clean 2-5 line summary>
+<clean 3-5 line summary>
 
 STRENGTHS:
 - point 1
@@ -22,6 +22,7 @@ STRENGTHS:
 IMPROVEMENTS:
 - point 1
 - point 2
+- point 3
 
 WEEKLY_CHALLENGE:
 - challenge 1

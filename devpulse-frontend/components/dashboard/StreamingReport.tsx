@@ -33,7 +33,7 @@ function RenderedReport({ report }: { report: string }) {
   }
 
   return (
-    <div className="space-y-5 text-[12px]">
+    <div className="space-y-5 text-[15px]">
       {overview && (
         <section>
           <p className="text-[12px] font-bold uppercase tracking-widest text-muted-foreground mb-2">
@@ -45,7 +45,7 @@ function RenderedReport({ report }: { report: string }) {
 
       {strengths.length > 0 && (
         <section>
-          <p className="text-[12px] font-bold uppercase tracking-widest text-green-600 dark:text-green-400 mb-2">
+          <p className="text-[15px] font-bold uppercase tracking-widest text-green-600 dark:text-green-400 mb-2">
             Strengths
           </p>
           <div className="space-y-1.5">
@@ -61,7 +61,7 @@ function RenderedReport({ report }: { report: string }) {
 
       {improvements.length > 0 && (
         <section>
-          <p className="text-[12px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-2">
+          <p className="text-[15px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-2">
             Improvements
           </p>
           <div className="space-y-1.5">
